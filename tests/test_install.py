@@ -81,20 +81,13 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(existing.read_bytes(), b"existing skill\n")
         self.assertFalse((self.root / ".agents").exists())
 
-    def test_preserves_and_identifies_previous_skill_folders(self):
-        old = [
-            self.root / ".agents" / "skills" / name / "SKILL.md"
-            for name in ("google-handoff", "codex-handoff")
-        ]
-        for skill in old:
-            skill.parent.mkdir(parents=True)
-            skill.write_bytes(b"previous skill\n")
+    def test_preserves_other_skill_folders(self):
+        skill = self.root / ".agents" / "skills" / "review-tests" / "SKILL.md"
+        skill.parent.mkdir(parents=True)
+        skill.write_bytes(b"existing skill\n")
         result = self.run_install(self.root)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(b"Earlier skill folders", result.stdout)
-        for skill in old:
-            self.assertEqual(skill.read_bytes(), b"previous skill\n")
-            self.assertIn(skill.parent.name.encode(), result.stdout)
+        self.assertEqual(skill.read_bytes(), b"existing skill\n")
         self.assertTrue((self.root / CODEX_SENDER / "SKILL.md").is_file())
         self.assertTrue((self.root / RECEIVER / "SKILL.md").is_file())
 

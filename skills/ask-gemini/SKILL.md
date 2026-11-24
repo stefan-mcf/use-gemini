@@ -1,6 +1,6 @@
 ---
 name: ask-gemini
-description: Prepare, track, and verify a handoff from Codex or Claude Code to Google Antigravity. Use when asked to ask Gemini to review, get a second opinion, run a Google handoff, or delegate scoped work in a shared workspace.
+description: Prepare, track, and verify a handoff from Codex or Claude Code to Google Antigravity. Use when asked to ask Gemini for a review or second opinion, delegate scoped work, or verify the returned result in a shared workspace.
 ---
 
 # Ask Gemini

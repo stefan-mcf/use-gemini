@@ -174,7 +174,7 @@ class HandoffTests(unittest.TestCase):
         process = self.run_helper("prepare", "--previous", prior, workspace=other, brief="Follow up.")
         self.assertNotEqual(process.returncode, 0)
 
-    def test_legacy_handoff_remains_reviewed_and_can_be_followed_up(self):
+    def test_saved_handoff_remains_reviewed_and_can_be_followed_up(self):
         prior = "0123456789ab"
         folder = self.job_path(prior)
         folder.mkdir(parents=True)
@@ -186,7 +186,7 @@ class HandoffTests(unittest.TestCase):
             json.dumps({
                 "workspace": str(self.workspace),
                 "job": prior,
-                "title": "Original Google handoff",
+                "title": "Review the proposed change",
                 "files_sha256": {},
                 "git": None,
             }),

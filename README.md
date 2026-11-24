@@ -40,13 +40,9 @@ Use your project path after `--workspace` to install into an existing project. O
 
 Each job lives under `.agent-handoffs/`. The sender saves the request and starting state. Antigravity records the result. The sender records what it verified in `REVIEW.md`. The helper adds a Git ignore file when absent. [File protocol and recovery](skills/ask-gemini/references/integration.md)
 
-### Upgrading from Codex ↔ Antigravity Handoff
-
-The sender command is now `$ask-gemini` in Codex and `/ask-gemini` in Claude Code. If you have the old `google-handoff` or `codex-handoff` skill folders, move them out of their skill discovery directories after installing the new version. Existing jobs keep their IDs and can be opened with `/receive-handoff <job-id>` in the same workspace.
-
 ## Validation
 
-Run `python3 -m unittest discover -s tests -v` to check the installer and local file workflow. CI runs these checks on Linux, macOS, and Windows without provider accounts. The walkthrough above runs the interactive handoff in your clients. [Prototype field notes](docs/field-notes.md) · [Packaging decision](docs/packaging.md)
+Run `python3 -m unittest discover -s tests -v` to check the installer and local file workflow. CI runs these checks on Linux, macOS, and Windows without provider accounts. The walkthrough above runs the interactive handoff in your clients. [Field notes](docs/field-notes.md) · [Packaging decision](docs/packaging.md)
 
 ## License
 

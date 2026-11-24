@@ -72,7 +72,7 @@ def install(workspace, client="codex"):
             pending.append((source, target))
         elif not is_plain_directory(target) or contents(target) != expected:
             raise ValueError(
-                f"Preserving existing skill at {target}. Move it aside to install this version."
+                f"Preserving existing skill at {target}. Move it aside before installing Ask Gemini."
             )
 
     for destination in destinations:
@@ -90,9 +90,7 @@ def install(workspace, client="codex"):
         for target in reversed(created):
             shutil.rmtree(target)
         raise
-    legacy = [agents / name for name in ("google-handoff", "codex-handoff")]
-    earlier = [path for path in legacy if path.exists() or path.is_symlink()]
-    return targets, earlier
+    return targets
 
 
 def main():
@@ -108,17 +106,12 @@ def main():
     )
     args = parser.parse_args()
     try:
-        targets, earlier = install(args.workspace, args.client)
+        targets = install(args.workspace, args.client)
     except (OSError, ValueError) as error:
         parser.exit(1, f"{error}\n")
     print("Handoff skills are available in these folders.")
     for target in targets:
         print(f"  {target}")
-
-    if earlier:
-        names = ", ".join(path.name for path in earlier)
-        print(f"Earlier skill folders are still present in {earlier[0].parent}.")
-        print(f"You can move {names} out of that directory after switching commands.")
 
 
 if __name__ == "__main__":
