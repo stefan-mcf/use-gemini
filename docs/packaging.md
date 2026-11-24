@@ -1,0 +1,7 @@
+# Packaging decision
+
+The release ships two skills. `google-handoff` tells Codex how to prepare a brief and review the return. `codex-handoff` tells Antigravity how to receive the brief and write a receipt. The workspace installer puts both under `.agents/skills/` so both clients can discover them in the chosen checkout. GitHub provides the source distribution. Any GitHub connector or skill remains optional. [Codex skill discovery](https://learn.chatgpt.com/docs/build-skills) · [Antigravity skill discovery](https://antigravity.google/docs/skills)
+
+The Python helper prepares and reads local files. The user opens the same workspace in Google's official client, selects their account there, and starts the task. If skill discovery is unavailable, the user can paste the prepared request prompt into the client. Google describes its restrictions for third-party access through a personal login. [Google Antigravity FAQ](https://antigravity.google/docs/faq/) · [Google Antigravity terms](https://antigravity.google/terms)
+
+A plugin would make sense if users need catalog installation and managed updates, or if several related skills or connector dependencies need to ship together. Revisit the decision when users encounter those needs. Each client would still need to discover its role, and the shared workspace would still carry the request and result. [Codex plugin packaging](https://developers.openai.com/plugins/build/plugins) · [Antigravity plugin packaging](https://antigravity.google/docs/build-plugins)

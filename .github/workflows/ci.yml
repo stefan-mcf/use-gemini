@@ -1,0 +1,64 @@
+name: CI
+
+"on": [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.9"
+          - os: ubuntu-latest
+            python: "3.13"
+          - os: macos-latest
+            python: "3.13"
+          - os: windows-latest
+            python: "3.13"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test the handoff workflow
+        run: python -m unittest discover -s tests -v
+      - name: Check project installation and conflict handling
+        shell: python
+        run: |
+          from pathlib import Path
+          import subprocess
+          import sys
+          import tempfile
+
+          command = [sys.executable, "install.py", "--workspace"]
+          with tempfile.TemporaryDirectory(prefix="handoff install ") as scratch:
+              root = Path(scratch)
+              workspace = root / "clean project"
+              workspace.mkdir()
+              subprocess.run([*command, str(workspace)], check=True)
+              subprocess.run([*command, str(workspace)], check=True)
+              installed_skills = workspace / ".agents" / "skills"
+              for name in ("google-handoff", "codex-handoff"):
+                  installed = installed_skills / name / "SKILL.md"
+                  source = Path("skills") / name / "SKILL.md"
+                  assert installed.read_bytes() == source.read_bytes()
+              helper = installed_skills / "google-handoff" / "scripts" / "handoff.py"
+              subprocess.run([sys.executable, str(helper), "--help"], cwd=workspace, check=True)
+
+              conflict_root = root / "conflicting project"
+              target = conflict_root / ".agents" / "skills"
+              existing = target / "codex-handoff" / "SKILL.md"
+              existing.parent.mkdir(parents=True)
+              existing.write_bytes(b"existing installation\n")
+              conflict = subprocess.run([*command, str(conflict_root)], capture_output=True)
+              assert conflict.returncode == 1, conflict
+              assert b"Preserving existing skill" in conflict.stderr, conflict.stderr
+              assert existing.read_bytes() == b"existing installation\n"
+              assert not (target / "google-handoff").exists()
