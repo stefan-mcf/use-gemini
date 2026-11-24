@@ -1,15 +1,15 @@
 ---
-name: google-handoff
-description: Prepare, track, and verify a local handoff from Codex to Google Antigravity. Use for a Google handoff, Gemini second opinion, code or design return, or follow-up round in a shared workspace.
+name: ask-gemini
+description: Prepare, track, and verify a handoff from Codex or Claude Code to Google Antigravity. Use when asked to ask Gemini to review, get a second opinion, run a Google handoff, or delegate scoped work in a shared workspace.
 ---
 
-# Google handoff
+# Ask Gemini
 
-Codex prepares and reviews the job in the shared workspace. The user starts the job in Google's official Antigravity client. Give them the exact workspace and the `native_prompt` from the helper, with `prompt` as a fallback when receiver skill discovery is unavailable.
+Prepare and review the job in the shared workspace. The user starts the job in Google's official Antigravity client. Give them the exact workspace and the `native_prompt` from the helper, with `prompt` as a fallback when receiver skill discovery is unavailable.
 
 ## Prepare
 
-1. Use the exact local workspace or Git worktree the user will open in both clients. Write a self-contained brief with the goal, allowed files or operations, and observable acceptance checks. Verify the check commands against the project. Include only material the user can share with the other client.
+1. Use the exact local workspace or Git worktree the user will open in both clients. Write a self-contained brief with the goal, allowed files or operations, and observable acceptance checks. For a review or second opinion, keep project files read-only and request findings in the receipt. For implementation, name the permitted edits. Verify the check commands against the project. Include only material the user can share with the other client.
 2. Pass the brief as UTF-8 text on stdin to `python3 <this-skill>/scripts/handoff.py prepare --workspace <workspace>`. Use `python` or `py` if that is the available Python 3 interpreter. Repeat `--track <workspace-relative-file>` for relevant dirty files, expected outputs, or files in a non-Git workspace. Capture the starting diff separately if line attribution matters in a dirty file.
 3. For design review, give the reviewer a concrete decision, the strongest alternative, and its constraints. For a follow-up, read the previous return and verified findings, include the unresolved issue and relevant counterargument, and pass `--previous <job-id>`.
 

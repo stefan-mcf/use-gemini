@@ -81,13 +81,13 @@ def prepare(root, jobs, paths, brief, previous):
         before["previous_job"] = previous
         prior_note = f"Previous handoff: `{previous}`\n\n"
     prompt = f"Read {relative}/REQUEST.md in this workspace. Carry out the brief and return the result as specified."
-    request = f"""# Antigravity handoff {job}
+    request = f"""# Handoff {job}
 
 Workspace: {root}
 
 {prior_note}{brief}
 
-## Return to Codex
+## Return the result
 
 Work in the recorded workspace. Preserve existing edits and follow its project instructions.
 If this job already has a RESULT.json, read it and stop to avoid repeating work.
@@ -105,7 +105,7 @@ Use completed if the requested work and required checks succeeded, or blocked fo
 partial work or an unmet requirement. Describe the blocker in the summary. In files
 list changed workspace-relative paths using forward slashes. Omit the handoff files.
 In checks list the actual checks and outcomes.
-Use empty arrays when applicable. Codex independently reviews the returned work.
+Use empty arrays when applicable. The originating agent independently reviews the returned work.
 """
     jobs.mkdir(exist_ok=True, mode=0o700)
     try:
@@ -120,7 +120,7 @@ Use empty arrays when applicable. Codex independently reviews the returned work.
         (staged / "REQUEST.md").write_text(request, encoding="utf-8")
         (staged / "baseline.json").write_text(json.dumps(before, indent=2) + "\n", encoding="utf-8")
         staged.rename(target)
-    return {"job": job, "workspace": str(root), "native_prompt": f"/codex-handoff {job}",
+    return {"job": job, "workspace": str(root), "native_prompt": f"/receive-handoff {job}",
             "prompt": prompt}
 
 

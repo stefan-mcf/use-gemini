@@ -1,6 +1,6 @@
 # Shared workspace protocol
 
-The helper requires Python 3.9 or later. Its only optional subprocess is Git for the baseline. The user starts Antigravity in the exact same local folder or worktree and submits the prompt in the official client. Select the account and model in that client. [Antigravity quickstart](https://antigravity.google/docs/cli-getting-started) · [Antigravity skills](https://antigravity.google/docs/skills) · [Antigravity FAQ](https://antigravity.google/docs/faq/)
+The helper requires Python 3.9 or later. Its only optional subprocess is Git for the baseline. The user starts Antigravity in the exact local folder or worktree used by Codex or Claude Code and submits `/receive-handoff <id>` or the fallback prompt in the official client. Select the account and model in that client. [Antigravity quickstart](https://antigravity.google/docs/cli-getting-started) · [Antigravity skills](https://antigravity.google/docs/skills) · [Antigravity FAQ](https://antigravity.google/docs/faq/)
 
 ## Files
 

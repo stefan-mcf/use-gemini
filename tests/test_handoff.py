@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 
-HELPER = Path(__file__).resolve().parents[1] / "skills/google-handoff/scripts/handoff.py"
+HELPER = Path(__file__).resolve().parents[1] / "skills/ask-gemini/scripts/handoff.py"
 
 
 class HandoffTests(unittest.TestCase):
@@ -70,7 +70,7 @@ class HandoffTests(unittest.TestCase):
         job = prepared["job"]
         folder = self.job_path(job)
         self.assertEqual(prepared["workspace"], str(self.workspace))
-        self.assertEqual(prepared["native_prompt"], f"/codex-handoff {job}")
+        self.assertEqual(prepared["native_prompt"], f"/receive-handoff {job}")
         self.assertIn(f".agent-handoffs/{job}/REQUEST.md", prepared["prompt"])
         self.assertNotIn("launcher", prepared)
         self.assertNotIn("terminal_command", prepared)
@@ -173,6 +173,36 @@ class HandoffTests(unittest.TestCase):
         other.mkdir()
         process = self.run_helper("prepare", "--previous", prior, workspace=other, brief="Follow up.")
         self.assertNotEqual(process.returncode, 0)
+
+    def test_legacy_handoff_remains_reviewed_and_can_be_followed_up(self):
+        prior = "0123456789ab"
+        folder = self.job_path(prior)
+        folder.mkdir(parents=True)
+        (folder / "REQUEST.md").write_text(
+            f"# Antigravity handoff {prior}\n\nWorkspace: {self.workspace}\n\n## Return to Codex\n",
+            encoding="utf-8",
+        )
+        (folder / "baseline.json").write_text(
+            json.dumps({
+                "workspace": str(self.workspace),
+                "job": prior,
+                "title": "Original Google handoff",
+                "files_sha256": {},
+                "git": None,
+            }),
+            encoding="utf-8",
+        )
+        (folder / "STARTED").mkdir()
+        sha256 = self.return_result(prior)
+        (folder / "REVIEW.md").write_text(
+            f"Verdict: accepted\nResult SHA-256: {sha256}\n", encoding="utf-8"
+        )
+
+        status = self.read_json("status", "--job", prior)
+        self.assertEqual((status["state"], status["verdict"]), ("review_recorded", "accepted"))
+        self.assertEqual(status["result_sha256"], sha256)
+        follow_up = self.prepare("--previous", prior)
+        self.assertEqual(self.read_json("status", "--job", follow_up["job"])["previous_job"], prior)
 
     def test_tracking_outside_the_workspace_fails(self):
         outside = self.root / "outside.txt"
