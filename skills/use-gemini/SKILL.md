@@ -1,9 +1,9 @@
 ---
-name: ask-gemini
-description: Prepare, track, and verify a handoff from Codex or Claude Code to Google Antigravity. Use when asked to ask Gemini for a review or second opinion, delegate scoped work, or verify the returned result in a shared workspace.
+name: use-gemini
+description: Prepare, track, and verify handoffs from Codex or Claude Code to Google Antigravity. Use when asked to use Gemini for a task, review, or second opinion, or to verify a returned Gemini handoff.
 ---
 
-# Ask Gemini
+# Use Gemini
 
 Prepare and review the job in the shared workspace. The user starts the job in Google's official Antigravity client. Give them the exact workspace and the `native_prompt` from the helper, with `prompt` as a fallback when receiver skill discovery is unavailable.
 

@@ -5,8 +5,8 @@ import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-CODEX_SENDER = Path(".agents/skills/ask-gemini")
-CLAUDE_SENDER = Path(".claude/skills/ask-gemini")
+CODEX_SENDER = Path(".agents/skills/use-gemini")
+CLAUDE_SENDER = Path(".claude/skills/use-gemini")
 RECEIVER = Path(".agents/skills/receive-handoff")
 
 

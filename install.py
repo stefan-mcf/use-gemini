@@ -1,10 +1,10 @@
-"""Install both handoff skills in a shared project directory."""
+"""Install Use Gemini and its Antigravity receiver in a workspace."""
 
 import argparse
 import shutil
 from pathlib import Path
 
-SENDER = "ask-gemini"
+SENDER = "use-gemini"
 RECEIVER = "receive-handoff"
 CLIENTS = ("codex", "claude", "both")
 IGNORE_CACHE = shutil.ignore_patterns("__pycache__", "*.pyc")
@@ -72,7 +72,7 @@ def install(workspace, client="codex"):
             pending.append((source, target))
         elif not is_plain_directory(target) or contents(target) != expected:
             raise ValueError(
-                f"Preserving existing skill at {target}. Move it aside before installing Ask Gemini."
+                f"Preserving existing skill at {target}. Move it aside before installing Use Gemini."
             )
 
     for destination in destinations:
@@ -109,7 +109,7 @@ def main():
         targets = install(args.workspace, args.client)
     except (OSError, ValueError) as error:
         parser.exit(1, f"{error}\n")
-    print("Handoff skills are available in these folders.")
+    print("Use Gemini skills are available in these folders.")
     for target in targets:
         print(f"  {target}")
 

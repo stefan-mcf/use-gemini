@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 
-HELPER = Path(__file__).resolve().parents[1] / "skills/ask-gemini/scripts/handoff.py"
+HELPER = Path(__file__).resolve().parents[1] / "skills/use-gemini/scripts/handoff.py"
 
 
 class HandoffTests(unittest.TestCase):
